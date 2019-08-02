@@ -108,7 +108,10 @@ public enum XmlGenerator {
             	XSSFCell cell = lanRow.getCell(i);
             	String lan = cell.toString();
             	lanList.add(lan);
-            	lanLineMap.put(lan, new StringBuilder());
+            	StringBuilder lineBuilder = new StringBuilder();
+            	// XML文件前面部分
+            	lineBuilder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n");
+            	lanLineMap.put(lan, lineBuilder);
             }
             
             //[语言], [[字符数组名], 字符数组值]
@@ -140,7 +143,11 @@ public enum XmlGenerator {
 	                		arrayValueBuilder = new StringBuilder();
 	                	}
 	                	
-	                	arrayValueBuilder.append("  <item>").append(value).append("</item>\n");
+	                	arrayValueBuilder.append(TranslateConstant.SPACE_BIG)
+	                	.append(TranslateConstant.SPACE_MIDDLE)
+	                	.append("<item>")
+	                	.append(value)
+	                	.append("</item>\n");
 						arrayMap.put(arrayKey, arrayValueBuilder);
 						lanArrayMap.put(lan, arrayMap);
 	                	
@@ -175,7 +182,8 @@ public enum XmlGenerator {
 	                	
 	                	StringBuilder lineBuilder = lanLineMap.get(lan);
 	                	if (lineBuilder != null) {
-	                		lineBuilder.append("<string name=\"")
+	                		lineBuilder.append(TranslateConstant.SPACE_BIG)
+	                		.append("<string name=\"")
 	                		.append(key).append("\">")
 	                		.append(value).append("</string>\n");
 	                	}
@@ -192,11 +200,13 @@ public enum XmlGenerator {
             			for (String arrayKey : arrayMap.keySet()) {
             				StringBuilder itemValues = arrayMap.get(arrayKey);
                 			if (itemValues != null) {
-                				lineBuilder.append("<string-array name=")
+                				lineBuilder.append(TranslateConstant.SPACE_BIG)
+                				.append("<string-array name=")
                 				.append(arrayKey)
                 				.append("\">")
                 				.append("\n")
                 				.append(itemValues.toString())
+                				.append(TranslateConstant.SPACE_BIG)
                 				.append("</string-array>\n\n");
                 			}
             			}
@@ -208,6 +218,8 @@ public enum XmlGenerator {
             for (String lan : lanList) {
             	StringBuilder lineBuilder = lanLineMap.get(lan);
             	if (lineBuilder != null) {
+            		// XML资源文件后面部分
+            		lineBuilder.append("</resources>");
             		String lines = lineBuilder.toString();
             		writeToXml(lan, lines);
             	} else {

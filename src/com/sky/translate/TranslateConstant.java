@@ -8,6 +8,8 @@ public class TranslateConstant {
 	public static final String REG_ARRAY_ITEM = "<item>[\\s\\S]*?</item>";
 	
 	public static final String REG_ITEM_SPLIT = "`";
+	public static final String SPACE_BIG = "    ";
+	public static final String SPACE_MIDDLE = "  ";
 	
 	public static final String READ_ME = "-------------------翻译工具2.0使用说明-------------------\r\n" + 
 			"使用准备工作：\r\n" + 

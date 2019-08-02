@@ -160,8 +160,11 @@ public enum XmlGenerator {
 		                		PrintTools.INSTANCE.print(key);
 		                		PrintTools.INSTANCE.println("字段没有内容");
 	                		}
-	                		
-	                	}
+	                	} else {
+							if (value.contains("\n")) {
+								PrintTools.INSTANCE.println(lan + "的字符串数组" + arrayKey + "有换行符，请手动处理");
+							}
+						}
 	                }
 				} else {
 					// 普通的字符串
@@ -178,14 +181,18 @@ public enum XmlGenerator {
 		                		PrintTools.INSTANCE.print(key);
 		                		PrintTools.INSTANCE.println("字段没有内容");
 	                		}
-	                	}
+	                	} else {
+	                		PrintTools.INSTANCE.println(lan + "的字符串" + key + "有换行符，请手动处理");
+						}
 	                	
 	                	StringBuilder lineBuilder = lanLineMap.get(lan);
 	                	if (lineBuilder != null) {
 	                		lineBuilder.append(TranslateConstant.SPACE_BIG)
 	                		.append("<string name=\"")
-	                		.append(key).append("\">")
-	                		.append(value).append("</string>\n");
+	                		.append(key)
+	                		.append("\">")
+	                		.append(value)
+	                		.append("</string>\n");
 	                	}
 	                }
 				}

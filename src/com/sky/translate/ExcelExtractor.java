@@ -235,6 +235,10 @@ public enum ExcelExtractor {
 				// 去掉>和</string>，得到真正的value
 				String realValue = tempValue.substring(1, tempValue.length()-9);
 				
+				if (realValue != null && realValue.contains("\n")) {
+					PrintTools.INSTANCE.println("警告：语言" + lanFolder + "有重复的这个字段有换行符：" + key + "，请注意确认");
+				}
+				
 				if (mCheckMultiple && oneLanKeyValue.containsKey(key)) {
 					PrintTools.INSTANCE.println("警告：语言" + lanFolder + "有重复的key：" + key);
 				}
@@ -269,8 +273,12 @@ public enum ExcelExtractor {
 				int itemStartIndex = itemStr.indexOf(">") + 1;
 				int itemEndIndex = itemStr.indexOf("</");
 				String itemValue = itemStr.substring(itemStartIndex, itemEndIndex);
-				// arraykey`[itemValue]作为唯一的key
+				// arrayKey`[itemValue]作为唯一的key
 				String specialArrayKey = arrayKey + TranslateConstant.REG_ITEM_SPLIT + itemValue;
+				
+				if (itemValue != null && itemValue.contains("\n")) {
+					PrintTools.INSTANCE.println("警告：语言" + lanFolder + "有重复的这个字符串数组有换行符：" + arrayKey + "，请注意确认");
+				}
 				
 				if (mCheckMultiple && oneLanKeyValue.containsKey(specialArrayKey)) {
 					PrintTools.INSTANCE.println("警告：语言" + lanFolder + "有重复的字符串数组key：" + arrayKey);

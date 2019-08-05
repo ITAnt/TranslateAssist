@@ -5,7 +5,8 @@ import java.awt.TextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -35,7 +36,7 @@ public class MainActivity {
 		ExcelExtractor.INSTANCE.init(currentPath);
 		XmlGenerator.INSTANCE.init(currentPath);
 		
-		readLocales(currentPath);
+		readLocales();
 		
 		JFrame jFrame = new JFrame();
 		jFrame.setTitle("翻译工具2.0");
@@ -228,21 +229,18 @@ public class MainActivity {
 	
 	public static Map<String, String> mLocaleMap;
 	// 读取locale区域文件
-	private static void readLocales(String currentPath) {
-		File localeFile = new File(currentPath, "locale/locales.xlsx");
-		if (!localeFile.exists()) {
-			localeFile = new File(currentPath, "locale/locales.xls");
-			if (!localeFile.exists()) {
-				PrintTools.INSTANCE.println("区域表不存在");
-				return;
-			}
+	private static void readLocales() {
+		InputStream inputStream = MainActivity.class.getResourceAsStream("/locales.xlsx");
+		if (inputStream == null) {
+			PrintTools.INSTANCE.println("区域表不存在");
+			return;
 		}
 		
 		mLocaleMap = new HashedMap<String, String>();
 
 		XSSFWorkbook workbook = null;
         try {
-        	workbook = new XSSFWorkbook(new FileInputStream(localeFile));
+        	workbook = new XSSFWorkbook(inputStream);
             // 获得工作表
             XSSFSheet sheet = workbook.getSheetAt(0);
             int rows = sheet.getPhysicalNumberOfRows();
@@ -258,7 +256,27 @@ public class MainActivity {
             }
         } catch (Exception e) {
         	e.printStackTrace();
-        }
+        	PrintTools.INSTANCE.println("区域表不存在");
+        	return;
+        } finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
         PrintTools.INSTANCE.println("区域表读取完毕");
 	}
 }

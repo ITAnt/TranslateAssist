@@ -146,6 +146,10 @@ public enum ExcelExtractor {
 		lanLine.add("");
 		for (File folder : lanFolderList) {
 			lanLine.add(folder.getName());
+			if (folder.getName().equals("values")) {
+				localeLine.add("英文");
+				continue;
+			}
 			if (MainActivity.mLocaleMap != null) {
 				String localeName = MainActivity.mLocaleMap.get(folder.getName());
 				if (localeName != null && !"".equals(localeName)) {

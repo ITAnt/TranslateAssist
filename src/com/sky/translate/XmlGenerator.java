@@ -182,7 +182,9 @@ public enum XmlGenerator {
 		                		PrintTools.INSTANCE.println("字段没有内容");
 	                		}
 	                	} else {
-	                		PrintTools.INSTANCE.println(lan + "的字符串" + key + "有换行符，请手动处理");
+	                		if (value.contains("\n")) {
+	                			PrintTools.INSTANCE.println(lan + "的字符串" + key + "有换行符，请手动处理");
+							}
 						}
 	                	
 	                	StringBuilder lineBuilder = lanLineMap.get(lan);

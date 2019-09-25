@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -129,7 +130,11 @@ public enum XmlGenerator {
                 if (key.contains(TranslateConstant.REG_ITEM_SPLIT)) {
                 	for (int j = 1; j < valueNum; j++) {
 	                	String lan = lanList.get(j-1);
-	                	String value = keyValueRow.getCell(j).toString();
+	                	String value = "";
+	                	Cell cell = keyValueRow.getCell(j);
+	                	if (cell != null) {
+	                		value = cell.toString();
+	                	}
 	                	
 	                	Map<String, StringBuilder> arrayMap = lanArrayMap.get(lan);
 	                	if (arrayMap == null) {
@@ -170,7 +175,11 @@ public enum XmlGenerator {
 					// 普通的字符串
 					for (int j = 1; j < valueNum; j++) {
 	                	String lan = lanList.get(j-1);
-	                	String value = keyValueRow.getCell(j).toString();
+	                	Cell cell = keyValueRow.getCell(j);
+	                	String value = "";
+	                	if (cell != null) {
+	                		value = cell.toString();
+	                	}
 	                	
 	                	if (value == null || value.equals("")) {
 	                		mHasEmptyError = true;
